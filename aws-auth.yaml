@@ -1,0 +1,28 @@
+apiVersion: v1
+data:
+  mapRoles: |
+    - rolearn: arn:aws:iam::499258509777:role/EKSNodeGroupRole
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+      - system:bootstrappers
+      - system:nodes
+        # Jenkins EC2 role so your Jenkins/Ubuntu host can administer the cluster
+    - rolearn: arn:aws:iam::499258509777:role/Jenkins-iam-role
+      username: jenkins
+      groups:
+        - system:masters
+  mapUsers: |
+    - userarn: arn:aws:iam::499258509777:user/DevSecOps-Project
+      username: devsecops-project
+      groups:
+        - system:masters
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"mapRoles":"- rolearn: arn:aws:iam::499258509777:role/EKSNodeGroupRole\n  username: system:node:{{EC2PrivateDNSName}}\n  groups:\n  - system:bootstrappers\n  - system:nodes\n","mapUsers":"- userarn: arn:aws:iam::499258509777:user/DevSecOps-Project\n  username: devsecops-project\n  groups:\n    - system:masters\n"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":"2025-12-30T15:43:11Z","name":"aws-auth","namespace":"kube-system","resourceVersion":"10883","uid":"24440118-5d04-4d98-93ce-7af1f8ad971b"}}
+  creationTimestamp: "2025-12-30T15:43:11Z"
+  name: aws-auth
+  namespace: kube-system
+  resourceVersion: "33960"
+  uid: 24440118-5d04-4d98-93ce-7af1f8ad971b
